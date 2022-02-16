@@ -1,28 +1,38 @@
 import React from 'react'
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import posthog from 'posthog-js'
 import ReactGA from 'react-ga'
 
-import Claimtag from './pages/Claimtag'
+import Claimtag from 'pages/Claimtag/Claimtag'
+import NotFoundPage from 'pages/NotFoundPage/NotFoundPage'
 
-const { REACT_APP_POSTHOG_KEY } = process.env
+const { REACT_APP_POSTHOG_KEY, REACT_APP_GA_KEY, REACT_APP_SITE_URL } =
+  process.env
 
 const App = () => {
-  posthog.init(REACT_APP_POSTHOG_KEY, {
-    api_host: 'https://app.posthog.com',
-  })
+  if (REACT_APP_POSTHOG_KEY) {
+    posthog.init(REACT_APP_POSTHOG_KEY, {
+      api_host: 'https://app.posthog.com',
+    })
+  }
 
-  ReactGA.initialize('UA-136166229-3')
+  ReactGA.initialize(REACT_APP_GA_KEY)
 
   let routes
 
+  const Redirect = ({ url }) => {
+    console.log(url)
+    window.location = url
+    return <></>
+  }
+
   routes = (
-    <Switch>
-      <Route path="/:cid">
-        <Claimtag />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path="/:cid" element={<Claimtag />} />
+      <Route element={<NotFoundPage />} />
+      <Route path="/" element={<Redirect url={REACT_APP_SITE_URL} />} />
+    </Routes>
   )
 
   return <Router>{routes}</Router>

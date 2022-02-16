@@ -2,14 +2,21 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import { Container, Grid, Link, TextField, Typography } from '@mui/material'
+import {
+  Button,
+  Container,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material'
 import usePageTrack from 'hooks/use-page-track'
 
 import { request } from 'util/client'
 import { LoadingButton } from '@mui/lab'
 import Loading from 'components/Loading'
 
-const QrScan = () => {
+const Claimtag = () => {
   const { cid } = useParams()
   const [status, setStatus] = useState('idle')
   const [claimtag, setClaimtag] = useState(null)
@@ -18,10 +25,13 @@ const QrScan = () => {
 
   useEffect(() => {
     const getClaimtag = async () => {
+      console.log('getting claimtag')
       try {
         const res = await request({
-          url: `/${cid}`,
+          url: `/claimtags/${cid}`,
         })
+
+        console.log(res)
 
         if (res.claimtag && !res.claimtag.url) {
           setStatus('unclaimed')
@@ -30,6 +40,7 @@ const QrScan = () => {
           setStatus('succeeded')
         }
       } catch (err) {
+        console.log(err)
         setStatus('failed')
       }
     }
@@ -85,11 +96,19 @@ const QrScan = () => {
         <Grid container justifyContent="center" spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h5" pt={7} textAlign="center">
-              Something Went Wrong
+              Not Found
             </Typography>
           </Grid>
           <Grid item xs={12} textAlign="center">
-            <Typography>Please refresh the page and try again.</Typography>
+            <Typography>
+              Sorry, this claimtag doesn't exist or has been deleted. Please
+              refresh the page and try again.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} textAlign="center">
+            <Button size="small" onClick={() => window.location.reload()}>
+              Refresh
+            </Button>
           </Grid>
         </Grid>
       </Container>
@@ -112,7 +131,6 @@ const QrScan = () => {
               <TextField
                 variant="outlined"
                 fullWidth
-                // size="small"
                 label="URL"
                 autoComplete="off"
                 type="url"
@@ -198,4 +216,4 @@ const QrScan = () => {
   }
 }
 
-export default QrScan
+export default Claimtag

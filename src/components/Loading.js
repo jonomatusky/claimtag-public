@@ -1,8 +1,9 @@
-import React from 'react-hook-form'
-import { Box, CircularProgress, Typography, Link } from '@mui/material'
+import React from 'react'
+import { Box, CircularProgress, Typography, Link, Grid } from '@mui/material'
 
 import Div100vh from 'components/Div100vh'
-import { Link as RouterLink } from 'react-router'
+
+const { REACT_APP_SITE_URL } = process.env
 
 const Loading = ({ backgroundColor, color }) => {
   return (
@@ -18,16 +19,24 @@ const Loading = ({ backgroundColor, color }) => {
         backgroundColor={backgroundColor || 'black'}
         textAlign="center"
       >
-        <CircularProgress sx={{ color: color }} />
-        <Typography variant="h4" pt={3}>
-          Connecting...
-        </Typography>
-        <Typography variant="body1" pt={3}>
-          created at
-          <Link component={RouterLink} to="/">
-            <b>claimtag.io</b>
-          </Link>
-        </Typography>
+        <Grid container justifyContent="center">
+          <Grid item xs={12}>
+            <CircularProgress sx={{ color: color }} />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h5" pt={3}>
+              Connecting...
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body1" pt={3}>
+              created at{' '}
+              <Link to={REACT_APP_SITE_URL}>
+                <b>claimtag.io</b>
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
       </Box>
     </Div100vh>
   )
