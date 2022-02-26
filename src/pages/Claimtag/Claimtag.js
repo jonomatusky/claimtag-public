@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
-import { useFormik } from 'formik'
-import * as yup from 'yup'
 import {
   Button,
   Container,
   Grid,
   Link,
-  TextField,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Typography,
 } from '@mui/material'
 import usePageTrack from 'hooks/use-page-track'
+import { Link as LinkIcon, QrCode, ThumbUp } from '@mui/icons-material'
 
 import { request } from 'util/client'
-import { LoadingButton } from '@mui/lab'
 import Loading from 'components/Loading'
+import ClaimtagForm from './components/ClaimtagForm'
 
 const Claimtag = () => {
   const { cid } = useParams()
@@ -52,47 +54,13 @@ const Claimtag = () => {
     return
   }, [cid, status])
 
-  const handleSubmit = async url => {
-    setStatus('pending')
-    try {
-      await request({
-        url: `/claimtags/${cid}`,
-        data: { url },
-        method: 'PATCH',
-      })
-    } catch (err) {
-      setStatus('failed')
-    }
-
-    setStatus('succeeded')
-  }
-
-  const validationSchema = yup.object({
-    url: yup
-      .string('Enter a URL')
-      .url('Enter a valid URL including http:// or https://')
-      .required('URL is required'),
-  })
-
-  const formik = useFormik({
-    initialValues: {
-      url: 'https://',
-    },
-    validationSchema: validationSchema,
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: handleSubmit,
-  })
-
   if (!!(claimtag || {}).url) {
-    setTimeout(() => {
-      window.location.href = claimtag.url
-    }, 1000)
+    window.location.href = claimtag.url
 
     return <Loading />
   } else if (status === 'failed') {
     return (
-      <Container>
+      <Container maxWidth="xs">
         <Grid container justifyContent="center" spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h5" pt={7} textAlign="center">
@@ -115,64 +83,46 @@ const Claimtag = () => {
     )
   } else if (status === 'unclaimed') {
     return (
-      <Container>
-        <form onSubmit={formik.handleSubmit}>
-          <Grid container justifyContent="flex-start" spacing={2} pt={3}>
-            <Grid item xs={12}>
-              <Typography variant="h4">Claim Your Card</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="body1">
-                Enter a link to share. Next time someone scans this QR code,
-                they'll be redirected there:
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                fullWidth
-                label="URL"
-                autoComplete="off"
-                type="url"
-                {...formik.getFieldProps('url')}
-                error={formik.touched.url && Boolean(formik.errors.url)}
-                helperText={formik.touched.url && formik.errors.url}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <LoadingButton
-                type="submit"
-                variant="contained"
-                size="large"
-                fullWidth
-                loading={formik.isSubmitting === true || status === 'submitted'}
-              >
-                <Typography
-                  letterSpacing={1}
-                  style={{ fontWeight: 900, textTransform: 'none' }}
-                >
-                  Claim
-                </Typography>
-              </LoadingButton>
-            </Grid>
-            <Grid item xs={12} pb={3}>
-              <Typography color="inherit" variant="body2" textAlign="center">
-                Create your own at{' '}
-                <Link
-                  href="https://claimtag.io"
-                  target="_blank"
-                  color="inherit"
-                >
-                  claimtag.io
-                </Link>
-              </Typography>
-            </Grid>
+      <Container maxWidth="xs">
+        <Grid container justifyContent="center" spacing={1} pt={3}>
+          <Grid item xs={12}>
+            <Typography variant="h4">Claim Your Tag</Typography>
           </Grid>
-        </form>
+          <Grid item xs={12}>
+            <List dense>
+              <ListItem>
+                <ListItemIcon sx={{ minWidth: '40px' }}>
+                  <LinkIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Enter a link to share, like your Linktree, LinkedIn, Instagram
+                    or Spotify."
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon sx={{ minWidth: '40px' }}>
+                  <QrCode />
+                </ListItemIcon>
+                <ListItemText
+                  primary="The next time someone scans your name tag, they'll be redirected
+                    to that link."
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon sx={{ minWidth: '40px' }}>
+                  <ThumbUp />
+                </ListItemIcon>
+                <ListItemText primary="Make sure to test it out once you submit your link by re-scanning the QR code!" />
+              </ListItem>
+            </List>
+          </Grid>
+          <Grid item xs={12}>
+            <ClaimtagForm status={status} setStatus={setStatus} />
+          </Grid>
+        </Grid>
       </Container>
     )
-  } else if (status === 'succeeded') {
+  } else if (status === 'success') {
     return (
       <Container>
         <Grid container justifyContent="center" spacing={3}>
@@ -183,7 +133,7 @@ const Claimtag = () => {
           </Grid>
           <Grid item xs={12} textAlign="center">
             <Typography>
-              You claimed your card. Scan the QR code again to test it out!
+              You claimed your card. Scan the QR code again to test it out.
             </Typography>
           </Grid>
         </Grid>

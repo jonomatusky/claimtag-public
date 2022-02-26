@@ -19,23 +19,21 @@ const App = () => {
 
   ReactGA.initialize(REACT_APP_GA_KEY)
 
-  let routes
-
   const Redirect = ({ url }) => {
     console.log(url)
     window.location = url
     return <></>
   }
 
-  routes = (
-    <Routes>
-      <Route path="/:cid" element={<Claimtag />} />
-      <Route element={<NotFoundPage />} />
-      <Route path="/" element={<Redirect url={REACT_APP_SITE_URL} />} />
-    </Routes>
+  return (
+    <Router>
+      <Routes>
+        <Route path="/:cid" element={<Claimtag />} />
+        <Route element={<NotFoundPage />} />
+        <Route path="/" element={<Redirect url={REACT_APP_SITE_URL} />} />
+      </Routes>
+    </Router>
   )
-
-  return <Router>{routes}</Router>
 }
 
 export default App
