@@ -70,7 +70,11 @@ const ClaimtagForm = ({ status, setStatus }) => {
     url: yup
       .string('Enter a URL')
       .url('Enter a valid URL including http:// or https://')
-      .required('URL is required'),
+      .required('URL is required')
+      .notOneOf(
+        [platformList.map(platformItem => platformItem.link)],
+        'Looks like you forgot a username'
+      ),
   })
 
   const formik = useFormik({
@@ -95,7 +99,6 @@ const ClaimtagForm = ({ status, setStatus }) => {
             fullWidth
             label="URL"
             autoComplete="off"
-            type="url"
             {...formik.getFieldProps('url')}
             error={formik.touched.url && Boolean(formik.errors.url)}
             helperText={formik.touched.url && formik.errors.url}

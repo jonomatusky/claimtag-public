@@ -5,7 +5,7 @@ import Div100vh from 'components/Div100vh'
 
 const { REACT_APP_SITE_URL } = process.env
 
-const Loading = ({ backgroundColor, color }) => {
+const Loading = () => {
   return (
     <Div100vh width="100%">
       <Box
@@ -16,12 +16,11 @@ const Loading = ({ backgroundColor, color }) => {
         alignItems="center"
         position="absolute"
         zIndex="20"
-        backgroundColor={backgroundColor || 'black'}
         textAlign="center"
       >
         <Grid container justifyContent="center">
           <Grid item xs={12}>
-            <CircularProgress sx={{ color: color }} />
+            <CircularProgress color="secondary" />
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h5" pt={3}>
@@ -30,10 +29,7 @@ const Loading = ({ backgroundColor, color }) => {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body1" pt={3}>
-              created at{' '}
-              <Link to={REACT_APP_SITE_URL}>
-                <b>claimtag.io</b>
-              </Link>
+              created at <Link to={REACT_APP_SITE_URL}>claimtag.io</Link>
             </Typography>
           </Grid>
         </Grid>

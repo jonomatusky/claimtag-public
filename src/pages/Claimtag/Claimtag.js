@@ -162,7 +162,7 @@ const Claimtag = () => {
       </Container>
     )
   } else {
-    return <Loading backgroundColor="white" />
+    return <Loading />
   }
 }
 

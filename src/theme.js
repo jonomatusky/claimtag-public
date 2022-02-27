@@ -15,17 +15,17 @@ const theme = createTheme({
     fontSize: 15,
     h1: {
       fontFamily: ['degular-display', 'sans-serif'].join(','),
-      fontWeight: '900',
+      fontWeight: '800',
       fontSize: '4rem',
     },
     h2: {
       fontFamily: ['degular-display', 'sans-serif'].join(','),
-      fontWeight: '900',
+      fontWeight: '800',
       fontSize: '3rem',
     },
     h3: {
       fontFamily: ['degular-display', 'sans-serif'].join(','),
-      fontWeight: '900',
+      fontWeight: '800',
       fontSize: '2.5rem',
     },
     h4: {
