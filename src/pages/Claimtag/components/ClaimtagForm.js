@@ -4,10 +4,8 @@ import { useFormik } from 'formik'
 import * as yup from 'yup'
 import {
   Grid,
-  Link,
   TextField,
   Typography,
-  Divider,
   FormControl,
   InputLabel,
   Select,
@@ -16,13 +14,19 @@ import {
 
 import { request } from 'util/client'
 import { LoadingButton } from '@mui/lab'
+import { ArrowForward } from '@mui/icons-material'
 
 const ClaimtagForm = ({ status, setStatus }) => {
   const platformList = [
     {
-      name: '',
-      link: 'https://',
+      name: 'Website',
+      link: '',
       displayLink: '',
+    },
+    {
+      name: 'Instagram',
+      link: 'https://instagram.com/',
+      displayLink: 'instagram.com/',
     },
     {
       name: 'LinkedIn',
@@ -33,11 +37,6 @@ const ClaimtagForm = ({ status, setStatus }) => {
       name: 'Linktree',
       link: 'https://linktr.ee/',
       displayLink: 'linktr.ee/',
-    },
-    {
-      name: 'Instagram',
-      link: 'https://instagram.com/',
-      displayLink: 'instagram.com/',
     },
     {
       name: 'Twitter',
@@ -51,8 +50,14 @@ const ClaimtagForm = ({ status, setStatus }) => {
   const [username, setUsername] = useState('')
 
   const handleSubmit = async ({ url }) => {
-    setStatus('pending')
-    if (status === 'unclaimed') {
+    if (url.indexOf('http://') !== 0 && url.indexOf('https://') !== 0) {
+      url = `http://${url}`
+    }
+
+    console.log(url)
+
+    if (status === 'unclaimed' && !!cid) {
+      setStatus('pending')
       try {
         await request({
           url: `/claimtags/${cid}`,
@@ -69,17 +74,23 @@ const ClaimtagForm = ({ status, setStatus }) => {
   const validationSchema = yup.object({
     url: yup
       .string('Enter a URL')
-      .url('Enter a valid URL including http:// or https://')
+      .transform(value => {
+        if (value.indexOf('http://') !== 0 && value.indexOf('https://') !== 0) {
+          return `http://${value}`
+        }
+        return value
+      })
+      .url('Must be a valid URL')
       .required('URL is required')
       .notOneOf(
         [platformList.map(platformItem => platformItem.link)],
-        'Looks like you forgot a username'
+        'Looks like you forgot to add a username'
       ),
   })
 
   const formik = useFormik({
     initialValues: {
-      url: 'https://',
+      url: '',
     },
     validationSchema: validationSchema,
     validateOnBlur: false,
@@ -89,45 +100,32 @@ const ClaimtagForm = ({ status, setStatus }) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <Grid container justifyContent="flex-start" spacing={1}>
-        <Grid item xs={12}>
-          <Typography variant="h6">Enter your link</Typography>
-        </Grid>
-        <Grid item xs={12}>
+      <Grid container justifyContent="flex-start" spacing={2}>
+        <Grid item xs={12} hidden>
           <TextField
             variant="outlined"
             fullWidth
             label="URL"
+            inputProps={{ autoCapitalize: 'none' }}
             autoComplete="off"
+            placeholder="https://"
             {...formik.getFieldProps('url')}
             error={formik.touched.url && Boolean(formik.errors.url)}
             helperText={formik.touched.url && formik.errors.url}
           />
         </Grid>
-        <Grid item xs={12} container alignItems="center" spacing={1}>
-          <Grid item xs>
-            <Divider />
-          </Grid>
-          <Grid item>
-            <Typography variant="body1">or</Typography>
-          </Grid>
-          <Grid item xs>
-            <Divider />
-          </Grid>
-        </Grid>
+
         <Grid item xs={12}>
-          <Typography variant="h6">
-            Choose a platform and enter your username
-          </Typography>
+          <Typography variant="h6">Enter your link</Typography>
         </Grid>
         <Grid item xs={12}>
           <FormControl fullWidth>
-            <InputLabel id="platform-label">Platform</InputLabel>
+            <InputLabel id="platform-label">Link Type</InputLabel>
             <Select
               labelId="platform-label"
               id="platform-select"
               value={platform}
-              label="Platform"
+              label="Link Type"
               onChange={event => {
                 setPlatform(event.target.value)
                 formik.setFieldValue(
@@ -148,8 +146,10 @@ const ClaimtagForm = ({ status, setStatus }) => {
           <TextField
             variant="outlined"
             fullWidth
-            label="username"
+            label={platform === 0 ? 'URL' : 'Username'}
+            placeholder={platform === 0 ? 'https://' : null}
             value={username}
+            autoComplete="off"
             onChange={event => {
               setUsername(event.target.value)
               formik.setFieldValue(
@@ -157,10 +157,12 @@ const ClaimtagForm = ({ status, setStatus }) => {
                 platformList[platform].link + event.target.value
               )
             }}
-            autoComplete="off"
             InputProps={{
               startAdornment: platformList[platform].displayLink,
             }}
+            inputProps={{ autoCapitalize: 'none' }}
+            error={formik.touched.url && Boolean(formik.errors.url)}
+            helperText={formik.touched.url && formik.errors.url}
           />
         </Grid>
 
@@ -171,22 +173,12 @@ const ClaimtagForm = ({ status, setStatus }) => {
             size="large"
             fullWidth
             loading={formik.isSubmitting === true || status === 'submitted'}
+            endIcon={<ArrowForward />}
           >
-            <Typography
-              letterSpacing={1}
-              style={{ fontWeight: 900, textTransform: 'none' }}
-            >
+            <Typography letterSpacing={1} style={{ fontWeight: 900 }}>
               Claim
             </Typography>
           </LoadingButton>
-        </Grid>
-        <Grid item xs={12} pb={3}>
-          <Typography color="inherit" variant="body2" textAlign="center">
-            Create your own at{' '}
-            <Link href="https://claimtag.io" target="_blank" color="inherit">
-              claimtag.io
-            </Link>
-          </Typography>
         </Grid>
       </Grid>
     </form>

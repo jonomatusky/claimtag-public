@@ -20,6 +20,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/test" element={<Claimtag />} />
         <Route path="/:cid" element={<Claimtag />} />
         <Route path="/" element={<Redirect url={REACT_APP_SITE_URL} />} />
         <Route element={<NotFoundPage />} />
