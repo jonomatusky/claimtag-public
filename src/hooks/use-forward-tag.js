@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { Button, Container, Grid, Typography } from '@mui/material'
 import usePageTrack from 'hooks/use-page-track'
@@ -8,10 +8,11 @@ import Loading from 'components/Loading'
 // import ClaimtagForm from './components/ClaimtagForm'
 // import logo from 'images/claimtag-logo.svg'
 
-const Claimtag = () => {
+const useForwardTag = useCallback(
+  () => {
   const { cid } = useParams()
   const [status, setStatus] = useState('idle')
-  // const [claimtag, setClaimtag] = useState(null)
+  const [claimtag, setClaimtag] = useState(null)
   const [redirect, setRedirect] = useState(null)
   const navigate = useNavigate()
 
@@ -28,12 +29,9 @@ const Claimtag = () => {
 
         if (claimtag && !claimtag.url) {
           const project = claimtag.project
-          // setStatus('unclaimed')
-          console.log(claimtag)
-          console.log(project.type)
           if (project.type === 'profile') {
             if (!!claimtag.profile) {
-              navigate(`/profile/${cid}`)
+              navigate(`/profile/${claimtag.profile.id}`)
             } else {
               navigate(`/${cid}/claim/register`)
             }
@@ -46,7 +44,6 @@ const Claimtag = () => {
           // setStatus('succeeded')
         }
       } catch (err) {
-        console.log(err)
         setStatus('failed')
       }
     }
@@ -62,36 +59,7 @@ const Claimtag = () => {
     return
   }, [cid, status, navigate])
 
-  if (!!redirect) {
-    window.location.href = redirect
-
-    return <Loading />
-  } else if (status === 'failed') {
-    return (
-      <Container maxWidth="xs">
-        <Grid container justifyContent="center" spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h5" pt={7} textAlign="center">
-              Not Found
-            </Typography>
-          </Grid>
-          <Grid item xs={12} textAlign="center">
-            <Typography>
-              Sorry, this claimtag doesn't exist or has been deleted. Please
-              refresh the page and try again.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} textAlign="center">
-            <Button size="small" onClick={() => window.location.reload()}>
-              Refresh
-            </Button>
-          </Grid>
-        </Grid>
-      </Container>
-    )
-  } else {
-    return <Loading />
-  }
+  return {status, claimtag}
 }
 
 export default Claimtag
