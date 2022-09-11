@@ -8,11 +8,12 @@ import usePageTitle from 'hooks/use-page-title'
 import usePageTrack from 'hooks/use-page-track'
 import { LoadingButton } from '@mui/lab'
 import { Download } from '@mui/icons-material'
+import Loading from 'components/Loading'
 
 const ViewProfile = () => {
   const { cid } = useParams()
   const [profile, setProfile] = useState()
-  const [status, setStatus] = useState('idle')
+  const [status, setStatus] = useState('loading')
 
   usePageTrack()
 
@@ -32,6 +33,7 @@ const ViewProfile = () => {
         } else if (!claimtag) {
           setStatus('failed')
         } else {
+          setStatus('succeeded')
           setProfile(claimtag.profile)
         }
       } catch (err) {
@@ -41,7 +43,7 @@ const ViewProfile = () => {
     }
 
     if (!!cid) {
-      if (status === 'idle') {
+      if (status === 'loading') {
         getClaimtag()
       }
     } else {
@@ -55,7 +57,9 @@ const ViewProfile = () => {
 
   usePageTitle(firstName + ' ' + lastName)
 
-  if (status === 'failed') {
+  if (status === 'loading') {
+    return <Loading />
+  } else if (status === 'failed') {
     return (
       <Container maxWidth="xs">
         <Grid container justifyContent="center" spacing={3}>

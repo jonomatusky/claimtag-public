@@ -13,7 +13,6 @@ const PanelBasic = ({
   email,
   linkedinUrl,
 }) => {
-  console.log(companyUrl)
   return (
     <Paper variant="outlined" sx={{ borderRadius: 2 }}>
       <Box p={2} pt={3}>
@@ -45,7 +44,7 @@ const PanelBasic = ({
               </Typography>
             )}
             {company && (
-              <Box display="flex" alignItems="center" pt={0.5}>
+              <Box display="flex" alignItems="center" pt={0.5} pb={1}>
                 <Typography fontSize="20px">
                   {!!companyUrl ? (
                     <>
@@ -135,7 +134,7 @@ const PanelBasic = ({
                     target="_blank"
                     underline="none"
                   >
-                    <Phone fontSize="small" />
+                    <Email fontSize="small" />
                   </Button>
                 </Box>
                 <Typography fontSize="20px" pl={1}>
@@ -169,7 +168,7 @@ const PanelBasic = ({
                     target="_blank"
                     underline="none"
                   >
-                    <Email fontSize="small" />
+                    <Phone fontSize="small" />
                   </Button>
                 </Box>
                 <Typography fontSize="20px" pl={1}>
