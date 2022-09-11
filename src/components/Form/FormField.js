@@ -129,6 +129,33 @@ const FormField = ({ formField, control, options }) => {
             )}
           </>
         )
+      case 'url':
+        return (
+          <>
+            <TextFielder
+              label={label}
+              placeholder={placeholder}
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+              error={Boolean(error)}
+              helperText={error?.message}
+              // type="text"
+              type="url"
+              inputProps={{
+                autoCapitalize: 'none',
+                autoComplete: 'off',
+                autoCorrect: 'off',
+                noValidate: true,
+              }}
+            />
+            {!!helpText && (
+              <Typography fontSize="14px" color="secondary" pt={1}>
+                <i>{helpText}</i>
+              </Typography>
+            )}
+          </>
+        )
       default:
         return (
           <>

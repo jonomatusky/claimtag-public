@@ -58,7 +58,7 @@ const ClaimtagForm = ({ status, setStatus, cid }) => {
       name: 'companyUrl',
       label: 'Company Website',
       placeholder: 'https://acme.com',
-      type: 'text',
+      type: 'url',
       validation: Yup.string()
         .url(`Must be a valid URL, including http:// or https://`)
         .max(100, 'Must be under 100 characters'),
@@ -92,7 +92,7 @@ const ClaimtagForm = ({ status, setStatus, cid }) => {
       name: 'linkedinUrl',
       label: 'LinkedIn Profile URL',
       placeholder: 'https://linkedin.com/in/username',
-      type: 'text',
+      type: 'url',
       validation: Yup.string()
         .url(`Must be a valid URL, including http:// or https://`)
         .max(100, 'Must be under 100 characters'),
