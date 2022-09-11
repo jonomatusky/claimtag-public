@@ -26,12 +26,10 @@ const Claimtag = () => {
 
         const claimtag = res.claimtag
 
-        if (claimtag && !claimtag.url) {
+        if (!!claimtag && !claimtag.url) {
           const project = claimtag.project
           // setStatus('unclaimed')
-          console.log(claimtag)
-          console.log(project.type)
-          if (project.type === 'profile') {
+          if (!!project && project.type === 'profile') {
             if (!!claimtag.profile) {
               navigate(`/profile/${cid}`)
             } else {
@@ -40,10 +38,12 @@ const Claimtag = () => {
           } else {
             navigate(`/${cid}/claim/form`)
           }
-        } else {
+        } else if (!!claimtag && !!claimtag.url) {
           // setClaimtag(res.claimtag)
           setRedirect(claimtag.url)
           // setStatus('succeeded')
+        } else {
+          setStatus('failed')
         }
       } catch (err) {
         console.log(err)
