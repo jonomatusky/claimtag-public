@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import useFormHelper from 'hooks/use-form-helper'
 import Form from 'components/Form/Form'
@@ -6,9 +6,20 @@ import Form from 'components/Form/Form'
 import { request } from 'util/client'
 import { LoadingButton } from '@mui/lab'
 import { Container, Grid, Typography } from '@mui/material'
-import { ArrowForward } from '@mui/icons-material'
+import { Check } from '@mui/icons-material'
 
 const ClaimtagForm = ({ status, setStatus, cid, profile }) => {
+  const [showSaved, setShowSaved] = useState(false)
+
+  useEffect(() => {
+    if (status === 'submitted') {
+      setShowSaved(true)
+      setTimeout(() => {
+        setShowSaved(false)
+      }, 1500)
+    }
+  }, [status])
+
   const handleSubmit = async values => {
     setStatus('pending')
     try {
@@ -51,7 +62,7 @@ const ClaimtagForm = ({ status, setStatus, cid, profile }) => {
       type: 'text',
       validation: Yup.string()
         .required('Name is required')
-        .max(50, 'Must be under 50 characters'),
+        .max(100, 'Must be under 100 characters'),
       category: 'basic',
     },
     {
@@ -61,7 +72,7 @@ const ClaimtagForm = ({ status, setStatus, cid, profile }) => {
       type: 'url',
       validation: Yup.string()
         .url(`Must be a valid URL, including http:// or https://`)
-        .max(100, 'Must be under 100 characters'),
+        .max(250, 'Must be under 250 characters'),
       category: 'basic',
     },
     {
@@ -83,7 +94,7 @@ const ClaimtagForm = ({ status, setStatus, cid, profile }) => {
     {
       name: 'phone',
       label: 'Phone',
-      placeholder: '555-555-5555',
+      placeholder: '(555) 555-5555',
       type: 'tel',
       // validation: Yup.string().phone('Must be a valid phone number'),
       category: 'settings',
@@ -137,11 +148,12 @@ const ClaimtagForm = ({ status, setStatus, cid, profile }) => {
                 size="large"
                 fullWidth
                 onClick={submit}
-                endIcon={<ArrowForward />}
+                endIcon={showSaved ? <Check /> : null}
+                disabled={showSaved}
                 loading={status === 'pending'}
               >
                 <Typography letterSpacing={1} style={{ fontWeight: 900 }}>
-                  Submit
+                  {showSaved ? 'Saved' : 'Save'}
                 </Typography>
               </LoadingButton>
             </Grid>

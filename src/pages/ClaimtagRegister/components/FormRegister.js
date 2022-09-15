@@ -51,7 +51,7 @@ const ClaimtagForm = ({ status, setStatus, cid }) => {
       type: 'text',
       validation: Yup.string()
         .required('Name is required')
-        .max(50, 'Must be under 50 characters'),
+        .max(100, 'Must be under 100 characters'),
       category: 'basic',
     },
     {
@@ -61,7 +61,7 @@ const ClaimtagForm = ({ status, setStatus, cid }) => {
       type: 'url',
       validation: Yup.string()
         .url(`Must be a valid URL, including http:// or https://`)
-        .max(100, 'Must be under 100 characters'),
+        .max(250, 'Must be under 250 characters'),
       category: 'basic',
     },
     {
@@ -83,7 +83,7 @@ const ClaimtagForm = ({ status, setStatus, cid }) => {
     {
       name: 'phone',
       label: 'Phone',
-      placeholder: '555-555-5555',
+      placeholder: '(555) 555-5555',
       type: 'tel',
       // validation: Yup.string().phone('Must be a valid phone number'),
       category: 'settings',

@@ -17,7 +17,7 @@ N:${lastName};${firstName};;;${!!title ? `\nTITLE:${title};` : ''}${
       }${!!phone ? `\nTEL;TYPE=main:${phone}` : ''}${
         !!company ? `\nORG:${company};` : ''
       }${!!linkedinUrl ? `\nURL:${linkedinUrl};` : ''}
-ADR;TYPE=work;TYPE=pref:;;;Valley Forge;PA;;
+ADR;TYPE=work;TYPE=pref:;;;;PA;;
 NOTE:Meet Montco Showcase
 END:VCARD
 `,

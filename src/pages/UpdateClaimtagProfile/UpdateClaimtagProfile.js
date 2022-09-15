@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, Container, Grid, Link, Typography } from '@mui/material'
+import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import usePageTrack from 'hooks/use-page-track'
 
 import Loading from 'components/Loading'
@@ -22,7 +22,9 @@ const UpdateClaimtagProfile = () => {
           url: `/claimtags/${cid}`,
         })
 
-        if (!!res.claimtag) {
+        console.log(res.claimtag.status)
+
+        if (!res.claimtag) {
           setStatus('failed')
         } else if (res.claimtag.status === 'unclaimed') {
           navigate(`/${cid}`)
@@ -92,18 +94,9 @@ const UpdateClaimtagProfile = () => {
                 style={{ width: '25px', marginRight: '7px' }}
               />
               <Typography variant="h5" textAlign="center">
-                Claim this Claimtag
+                Update Profile
               </Typography>
             </Box>
-          </Grid>
-          <Grid item xs={11}>
-            <Typography mb={1}>
-              <b>Create a profile</b> you'd like to share with this QR code.
-            </Typography>
-            <Typography>
-              The next time someone <b>scans this QR code</b>, they'll be{' '}
-              <b>taken to that profile</b>.
-            </Typography>
           </Grid>
           <Grid item xs={11}>
             <FormRegister

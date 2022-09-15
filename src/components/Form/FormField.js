@@ -64,6 +64,24 @@ const FormField = ({ formField, control, options }) => {
         )
       case 'tel':
         return (
+          // <>
+          //   <TextFielder
+          //     label={label}
+          //     value={value.toString().slice(0, 10)}
+          //     onChange={onChange}
+          //     onBlur={onBlur}
+          //     error={Boolean(error)}
+          //     helperText={error?.message}
+          //     type="tel"
+          //     noValidate
+          //     placeholder={placeholder}
+          //   />
+          //   {!!helpText && (
+          //     <Typography fontSize="14px" color="secondary" pt={1}>
+          //       <i>{helpText}</i>
+          //     </Typography>
+          //   )}
+          // </>
           <>
             <MuiPhoneNumber
               disableDropdown
@@ -74,13 +92,16 @@ const FormField = ({ formField, control, options }) => {
                 shrink: true,
               }}
               defaultCountry={'us'}
+              onlyCountries={['us']}
               label={label}
-              value={value.toString().slice(0, 10)}
+              value={value}
               onChange={onChange}
               onBlur={onBlur}
               error={Boolean(error)}
               helperText={error?.message}
               type="tel"
+              disableCountryCode
+              placeholder={placeholder}
             />
             {!!helpText && (
               <Typography fontSize="14px" color="secondary" pt={1}>

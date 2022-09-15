@@ -20,7 +20,7 @@ N:${lastName};${firstName};;;
 TITLE:${title};
 EMAIL;type=INTERNET;type=pref:${email}
 TEL;TYPE=main:${phone}
-ADR;TYPE=work;TYPE=pref:;;;Valley Forge;;;
+ADR;TYPE=work;TYPE=pref:;;;;PA;;
 END:VCARD
 `,
     ],

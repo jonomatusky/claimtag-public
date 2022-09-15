@@ -7,7 +7,7 @@ import BasicInfo from './components/PanelBasicsIndividual'
 import usePageTitle from 'hooks/use-page-title'
 import usePageTrack from 'hooks/use-page-track'
 // import { LoadingButton } from '@mui/lab'
-import { ContactMail } from '@mui/icons-material'
+import { ContactMail, Edit } from '@mui/icons-material'
 import Loading from 'components/Loading'
 // import createVCard from 'util/createVCard'
 // import ButtonDownloadVCard from 'components/ButtonDownloadVCard'
@@ -15,17 +15,17 @@ import Loading from 'components/Loading'
 import { LoadingButton } from '@mui/lab'
 import DialogContactForm from 'components/DialogContactForm'
 // import { Box } from '@mui/system'
-// import DialogSendUpdateEmail from './components/DialogSendUpdateEmail'
+import DialogSendUpdateEmail from './components/DialogSendUpdateEmail'
 // import useCreateVCard from 'hooks/use-create-v-card'
 
 const { REACT_APP_PUBLIC_URL } = process.env
 
-const ViewProfile = () => {
+const SendUpdateEmail = () => {
   const { cid } = useParams()
   const [profile, setProfile] = useState({})
   const [status, setStatus] = useState('loading')
   const [open, setOpen] = useState(false)
-  // const [sendUpdateEmailIsOpen, setSendUpdateEmailIsOpen] = useState(false)
+  const [sendUpdateEmailIsOpen, setSendUpdateEmailIsOpen] = useState(false)
 
   usePageTrack()
 
@@ -120,17 +120,17 @@ const ViewProfile = () => {
           // onSubmit={sendEmail}
           setStatus={setStatus}
         />
-        {/* <DialogSendUpdateEmail
+        <DialogSendUpdateEmail
           cid={cid}
           open={sendUpdateEmailIsOpen}
           onClose={() => setSendUpdateEmailIsOpen(false)}
-        /> */}
+        />
         <Container maxWidth="xs">
           <Grid container justifyContent="center" pt={2} pb={2}>
             <Grid item xs={12}>
               <BasicInfo {...profile} />
             </Grid>
-            {/* <Grid item xs={12} container justifyContent="center">
+            <Grid item xs={12} container justifyContent="center">
               <Button
                 size="small"
                 // fullWidth
@@ -143,10 +143,10 @@ const ViewProfile = () => {
                   fontSize="10pt"
                   onClick={() => setSendUpdateEmailIsOpen(true)}
                 >
-                  Edit Profile
+                  Send Update Email
                 </Typography>
               </Button>
-            </Grid> */}
+            </Grid>
           </Grid>
         </Container>
         <div
@@ -208,4 +208,4 @@ const ViewProfile = () => {
     )
   }
 }
-export default ViewProfile
+export default SendUpdateEmail
